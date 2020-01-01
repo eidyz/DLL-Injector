@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"syscall"
 
 	"github.com/JamesHovious/w32"
 	memory "github.com/eidyz/memorygo"
@@ -22,27 +23,27 @@ func input(q string) string {
 }
 
 func main() {
-	fmt.Println("kernel", modkernel32, hKernel32)
-	pid, err := memory.FindProcessByName("notepad.exe")
+	processName := input("Process name: ")
+	pid, err := memory.FindProcessByName(processName)
 	if err != nil {
 		panic(err)
 	}
 
 	dir, err := os.Getwd()
 	if err != nil {
-		fmt.Println("OpenProcess failed")
+		fmt.Println("Resolving current directory failed")
 		panic(err)
 	}
 
 	dll := dir + "\\" + "inject.dll"
 
-	h, err := w32.OpenProcess(w32.PROCESS_ALL_ACCESS, false, pid)
+	h, err := w32.OpenProcess(w32.PROCESS_QUERY_INFORMATION|w32.PROCESS_CREATE_THREAD|w32.PROCESS_VM_OPERATION|w32.PROCESS_VM_WRITE, false, pid)
 	if err != nil {
 		fmt.Println("OpenProcess failed")
 		panic(err)
 	}
 
-	argAddress, err := w32.VirtualAllocEx(h, 0, len(dll), w32.MEM_RESERVE|w32.MEM_COMMIT, w32.PAGE_READWRITE)
+	argAddress, err := w32.VirtualAllocEx(h, 0, len(dll), w32.MEM_COMMIT, w32.PAGE_READWRITE)
 	if err != nil {
 		fmt.Println("VirtualAllocEx failed")
 		panic(err)
@@ -51,11 +52,12 @@ func main() {
 	bytesW := w32.WriteProcessMemory(h, uint32(argAddress), []byte(dll), uint(len(dll)))
 	fmt.Println("Bytes written:", bytesW)
 
-	loadLib, err := w32.GetProcAddress(w32.HANDLE(hKernel32), "LoadLibraryA")
+	loadLib, err := syscall.GetProcAddress(syscall.Handle(hKernel32), "LoadLibraryA")
 	if err != nil {
 		fmt.Println("GetProcAddress failed")
 		panic(err)
 	}
+
 	_, threadId, err := w32.CreateRemoteThread(h, nil, 0, uint32(loadLib), argAddress, 0)
 	if err != nil {
 		fmt.Println("CreateRemoteThread failed")
