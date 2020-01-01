@@ -78,13 +78,11 @@ func FindProcessByName(name string) (uint32, error) {
 }
 
 func main() {
-
-	pid, err := FindProcessByName("notepad.exe")
+	pid, err := FindProcessByName("Hyper.exe")
 	if err != nil {
 		panic(err)
 	}
 
-	// dllName := input("DLL:")
 	dir, err := os.Getwd()
 	if err != nil {
 		fmt.Println("OpenProcess failed")
@@ -99,13 +97,20 @@ func main() {
 		panic(err)
 	}
 
-	argAddress, err := w32.VirtualAllocEx(h, 0, len(dll), 0x1000|0x2000, w32.PAGE_READWRITE)
+	argAddress, err := w32.VirtualAllocEx(h, 0, len(dll), w32.MEM_RESERVE|w32.MEM_COMMIT, w32.PAGE_READWRITE)
 	if err != nil {
 		fmt.Println("VirtualAllocEx failed")
 		panic(err)
 	}
+	fmt.Println("Arg adress:", argAddress)
 
-	w32.WriteProcessMemory(h, uint32(argAddress), []byte(dll), uint(len(dll)))
-	fmt.Println(uint32(loadLibraryA.Addr()), argAddress, dll, pid)
-	w32.CreateRemoteThread(h, nil, 0, uint32(loadLibraryA.Addr()), argAddress, 0)
+	bytesW := w32.WriteProcessMemory(h, uint32(argAddress), []byte(dll), uint(len(dll)))
+	fmt.Println("Bytes written:", bytesW)
+	_, threadId, err := w32.CreateRemoteThread(h, nil, 0, uint32(loadLibraryA.Addr()), argAddress, 0)
+	if err != nil {
+		fmt.Println("CreateRemoteThread failed")
+		panic(err)
+	}
+	fmt.Println("Thread ID:", threadId)
+	w32.CloseHandle(h)
 }
