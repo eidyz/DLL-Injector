@@ -64,5 +64,6 @@ func main() {
 		panic(err)
 	}
 	fmt.Println("Thread ID:", threadId)
+	fmt.Println("Successfully injected DLL into", processName)
 	w32.CloseHandle(h)
 }
