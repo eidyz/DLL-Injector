@@ -1,6 +1,8 @@
 github.com/JamesHovious/w32 v1.1.0 h1:Cghhl7dY4oawL2BvmsuxEb5cPwUw1ctPAq85VIt5qtQ=
 github.com/JamesHovious/w32 v1.1.0/go.mod h1:/Y2i/iSYfWJypxp4NnirO9/V19yV2dJvNFCdU0hyW68=
-github.com/eidyz/memorygo v0.0.0-20191128223842-0b1ba1b60610 h1:qpQvCYgxuFcb2r/A7+PxTQALFr0HeixzdRw2dhb0S5s=
-github.com/eidyz/memorygo v0.0.0-20191128223842-0b1ba1b60610/go.mod h1:SRfGox2ayhGl0LLMXgKQos3iNM74HN/HUw7oeESq9LA=
+github.com/eidyz/memorygo v0.0.0-20200101161041-8bb687caba54 h1:OPsNy15fVoCSu2S0GTBbqp/tUMOez9DkFUmDirSDUh0=
+github.com/eidyz/memorygo v0.0.0-20200101161041-8bb687caba54/go.mod h1:SRfGox2ayhGl0LLMXgKQos3iNM74HN/HUw7oeESq9LA=
+github.com/eidyz/memorygo v0.0.1 h1:BFJQcdL2wHTyk/JYmLMLUixHqHKwPgh9kVnV5WVse7c=
+github.com/eidyz/memorygo v0.0.1/go.mod h1:SRfGox2ayhGl0LLMXgKQos3iNM74HN/HUw7oeESq9LA=
 golang.org/x/sys v0.0.0-20191228213918-04cbcbbfeed8 h1:JA8d3MPx/IToSyXZG/RhwYEtfrKO1Fxrqe8KrkiLXKM=
 golang.org/x/sys v0.0.0-20191228213918-04cbcbbfeed8/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
